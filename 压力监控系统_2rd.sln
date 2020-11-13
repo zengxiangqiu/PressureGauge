@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "压力监控系统_初版", "压力监控系统_初版\压力监控系统_初版.csproj", "{80EDC44C-FB20-4E97-AE35-A4B7D0F3FE03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80EDC44C-FB20-4E97-AE35-A4B7D0F3FE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80EDC44C-FB20-4E97-AE35-A4B7D0F3FE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80EDC44C-FB20-4E97-AE35-A4B7D0F3FE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80EDC44C-FB20-4E97-AE35-A4B7D0F3FE03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {290B0F69-DC80-4231-B509-FE5695C6D43C}
+	EndGlobalSection
+EndGlobal
