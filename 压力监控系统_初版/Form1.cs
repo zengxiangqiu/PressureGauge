@@ -661,13 +661,22 @@ namespace 压力监控系统_初版
                         }
                         else
                         {
-                            char[] values = Send_Text.ToCharArray();
-                            foreach (char letter in values)
+                            //char[] values = Send_Text.ToCharArray();
+                            //foreach (char letter in values)
+                            //{
+                            //    int value = Convert.ToInt32(letter);
+                            //    string HexInput = String.Format("{0:X}", value);
+                            //    serialPort.WriteLine(HexInput);
+                            //}
+                            var chars = Send_Text.Split(' ');
+                            List<byte> all = new List<byte>();
+                            foreach (var item in chars)
                             {
-                                int value = Convert.ToInt32(letter);
-                                string HexInput = String.Format("{0:X}", value);
-                                serialPort.WriteLine(HexInput);
+                                var bytes = StringToByteArray(item);
+                                all.AddRange(bytes);
                             }
+                           
+                            serialPort.Write(all.ToArray(), 0, all.Count);
                         }
                     }
                 }
@@ -681,6 +690,15 @@ namespace 压力监控系统_初版
 
 
         }
+
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
+        }
+
         //RS485发送
         public void Send_RS485()
         {
