@@ -8,14 +8,10 @@ namespace 压力监控系统_初版
 {
     public static class Crc16
     {
-        /// </summary>
-        /// <param name="data">校验数据</param>
-        /// <returns>高低8位</returns>
         public static byte[] CRCCalc(byte[] bytedata)
         {
             byte[] result = new byte[2];
             byte[] crcbuf = bytedata.ToArray();
-            //计算并填写CRC校验码
             int crc = 0xffff;
             int len = crcbuf.Length;
             for (int n = 0; n < len; n++)

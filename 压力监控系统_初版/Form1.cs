@@ -18,7 +18,7 @@ namespace 压力监控系统_初版
     {
         //实例化串口
         SerialPort serialPort = new SerialPort();
-        string saveDataFile = null;
+        string saveDataFile = "log.txt";
         FileStream saveDataFS = null;
 
 
@@ -116,16 +116,11 @@ namespace 压力监控系统_初版
         {
             Init_Port_Confs();
 
-            txtSend.Text = "01 03";
-
-            OpenCloseBto_Click(null, null);
-
             Control.CheckForIllegalCrossThreadCalls = false;
-            serialPort.DataReceived += new SerialDataReceivedEventHandler(dataReceived);
 
-            //ready，默认优先使用RS485
+            serialPort.DataReceived += SerialPort_DataReceived;
 
-            if (RS485CheckBox.Checked)
+            if (cbRs485.Checked)
             {
                 serialPort.DtrEnable = true;
                 serialPort.RtsEnable = true;
@@ -135,10 +130,7 @@ namespace 压力监控系统_初版
                 serialPort.DtrEnable = false;
                 serialPort.RtsEnable = false;
             }
-            RS485CheckBox.Checked = true;
-
-            //serialPort.Close();
-            //btnSend.Enabled = false;
+            cbRs485.Checked = true;
         }
 
         private void OpenCloseBto_Click(object sender, EventArgs e)
@@ -259,51 +251,13 @@ namespace 压力监控系统_初版
             }
         }
 
-        #region**以后修改**
-
-        //Received&Send
-        //private void dataSendReceived(object sender, SerialDataReceivedEventArgs e)
-        //{
-
-        //    if (serialPort.IsOpen && OpenCloseBto.Text =="Close")
-        //    {
-        //        DateTime datetime_now = DateTime.Now;
-        //        receiveTxt.Text += string.Format("{0}\r\n", datetime_now);
-        //        receiveTxt.ForeColor = Color.Blue;
-
-        //        waittime .Interval =100;
-        //        waittime.Enabled = false;
-
-        //        //发送指令
-        //        serialPort.WriteLine(sendTxt.Text);
-        //        ////等待时间
-        //        //waittime.Enabled  =true;
-        //        //接收指令
-
-
-        //        string input = serialPort.ReadLine();
-        //        receiveTxt.Text += input + "\r\n";
-
-
-        //    }
-        //    else 
-        //    {
-
-        //        MessageBox.Show("串口尚未打开", "Error");
-        //        return;
-
-        //    }
-        //}
-        #endregion
-
-        //Received
-        private void dataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
 
 
             this.Invoke((EventHandler)(delegate
            {
-               if (RS485CheckBox.Checked)
+               if (cbRs485.Checked)
                {
                     dataReceived_485();
                    }
@@ -402,15 +356,15 @@ namespace 压力监控系统_初版
                     //}
 
                     //显示数据
-                    receiveTxt.Text += string.Format("{0}\r\n", dateofpressure);
-                    receiveTxt.ForeColor = Color.Blue;
+                    pressureTxt.Text += string.Format("{0}\r\n", dateofpressure);
+                    pressureTxt.ForeColor = Color.Blue;
 
                     if (recStrRadBto.Checked)
                     {
                         try
                         {
                             string input = Pressure;
-                            receiveTxt.Text += input + "\r\n";
+                            pressureTxt.Text += input + "\r\n";
                             if (saveDataFS != null)
                             {
                                 byte[] info = new UTF8Encoding(true).GetBytes(input + "\r\n");
@@ -421,8 +375,8 @@ namespace 压力监控系统_初版
                         {
                             MessageBox.Show(ex.Message, "Error");
                         }
-                        receiveTxt.SelectionStart = receiveTxt.Text.Length;
-                        receiveTxt.ScrollToCaret();
+                        pressureTxt.SelectionStart = pressureTxt.Text.Length;
+                        pressureTxt.ScrollToCaret();
                         serialPort.DiscardInBuffer();
                     }
 
@@ -662,7 +616,7 @@ namespace 压力监控系统_初版
                 }
                 else
                 {
-                    if (RS485CheckBox.Checked)
+                    if (cbRs485.Checked)
                     {
                         Send_RS485();
                     }
@@ -674,22 +628,22 @@ namespace 压力监控系统_初版
                         }
                         else
                         {
-                            //char[] values = Send_Text.ToCharArray();
-                            //foreach (char letter in values)
-                            //{
-                            //    int value = Convert.ToInt32(letter);
-                            //    string HexInput = String.Format("{0:X}", value);
-                            //    serialPort.WriteLine(HexInput);
-                            //}
-                            var chars = Send_Text.Split(' ');
-                            List<byte> all = new List<byte>();
-                            foreach (var item in chars)
+                            char[] values = Send_Text.ToCharArray();
+                            foreach (char letter in values)
                             {
-                                var bytes = StringToByteArray(item);
-                                all.AddRange(bytes);
+                                int value = Convert.ToInt32(letter);
+                                string HexInput = String.Format("{0:X}", value);
+                                serialPort.WriteLine(HexInput);
                             }
+                            //var chars = Send_Text.Split(' ');
+                            //List<byte> all = new List<byte>();
+                            //foreach (var item in chars)
+                            //{
+                            //    var bytes = StringToByteArray(item);
+                            //    all.AddRange(bytes);
+                            //}
                            
-                            serialPort.Write(all.ToArray(), 0, all.Count);
+                            //serialPort.Write(all.ToArray(), 0, all.Count);
                         }
                     }
                 }
@@ -1046,6 +1000,11 @@ namespace 压力监控系统_初版
         //        return;
         //    }
         #endregion
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
