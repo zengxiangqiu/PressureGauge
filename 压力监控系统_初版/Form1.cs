@@ -33,7 +33,10 @@ namespace 压力监控系统_初版
         {
             InitializeComponent();
         }
-        //初始化串口界面参数
+        
+        /// <summary>
+        /// Init Ports
+        /// </summary>
         private void Init_Port_Confs()
         {
             string[] portname = SerialPort.GetPortNames();
@@ -57,7 +60,7 @@ namespace 压力监控系统_初版
             if (ArrayComPortsNames.Length == 0)
             {
                 statuslabel.Text = "没有找到串口";
-                OpenCloseBto.Enabled = false;
+                btnOpen.Enabled = false;
             }
             else
             {
@@ -67,7 +70,8 @@ namespace 压力监控系统_初版
                     PortNameCbb.Items.Add(ArrayComPortsNames[i]);
                 }
                 PortNameCbb.Text = ArrayComPortsNames[0];
-                OpenCloseBto.Enabled = true;
+                PortNameCbb.Text = "COM5";
+                btnOpen.Enabled = true;
             }
 
             //BaudRate
@@ -78,6 +82,7 @@ namespace 压力监控系统_初版
             BaudRateCbb.Items.Add(38400);
             BaudRateCbb.Items.ToString();
             BaudRateCbb.Text = BaudRateCbb.Items[2].ToString();
+            BaudRateCbb.Text = "2400";
 
             //Data Bits
             DataBitsCbb.Items.Add(5);
@@ -111,6 +116,10 @@ namespace 压力监控系统_初版
         {
             Init_Port_Confs();
 
+            txtSend.Text = "01 03";
+
+            OpenCloseBto_Click(null, null);
+
             Control.CheckForIllegalCrossThreadCalls = false;
             serialPort.DataReceived += new SerialDataReceivedEventHandler(dataReceived);
 
@@ -126,10 +135,10 @@ namespace 压力监控系统_初版
                 serialPort.DtrEnable = false;
                 serialPort.RtsEnable = false;
             }
+            RS485CheckBox.Checked = true;
 
-
-            serialPort.Close();
-            sendBto.Enabled = false;
+            //serialPort.Close();
+            //btnSend.Enabled = false;
         }
 
         private void OpenCloseBto_Click(object sender, EventArgs e)
@@ -211,10 +220,10 @@ namespace 压力监控系统_初版
                     
                     sendStrRadiobto.Enabled = false;
 
-                    sendBto.Enabled = true;
+                    btnSend.Enabled = true;
                     refreshBto.Enabled = false;
 
-                    OpenCloseBto.Text = "Close";
+                    btnOpen.Text = "Close";
                 }
                 catch (System.Exception ex)
                 {
@@ -237,10 +246,10 @@ namespace 压力监控系统_初版
                 recStrRadBto.Enabled = true;
                 sendStrRadiobto.Enabled = true;
 
-                sendBto.Enabled = false;
+                btnSend.Enabled = false;
                 refreshBto.Enabled = true;
 
-                OpenCloseBto.Text = "Open";
+                btnOpen.Text = "Open";
 
                 if (saveDataFS != null)
                 {
@@ -338,7 +347,7 @@ namespace 压力监控系统_初版
                             Check_In[i] = buffer[i];
                         }
 
-                        byte[] Check_Out = CRC16_C(Check_In);
+                        byte[] Check_Out = Crc16.CRCCalc(Check_In);
                         if (Check_Out[0] != buffer[binary_data_1.Length-2] || Check_Out[1] != buffer[binary_data_1.Length-1])
                         {
                             buffer.RemoveRange(0, buffer.Count);
@@ -361,12 +370,13 @@ namespace 压力监控系统_初版
                 if (data_catched)
                 {
                     //string dataPressure = null;
-                    double xiaoshu;
+                    double point;
                     string Pressure = null;
                     // string PressureLow = null;
                     string unit = null;
                     double Pressure_Output = 0.0000;
 
+                    unit = binary_data_1[12].ToString();
                     //单位
                     switch (unit)
                     {
@@ -374,9 +384,9 @@ namespace 压力监控系统_初版
                         case "4": unit = "Mpa"; break;
                         case "5": unit = "Pa"; break;
                     }
-                    xiaoshu = Convert.ToDouble(binary_data_1[6].ToString());
+                    point = Convert.ToDouble(binary_data_1[6].ToString());
                     Pressure_Output = (int.Parse(binary_data_1[8].ToString()) * 10000 +
-                    int.Parse(binary_data_1[9].ToString()) * 100 + int.Parse(binary_data_1[10].ToString())) / Math.Pow(10, xiaoshu);
+                    int.Parse(binary_data_1[9].ToString("X2"), System.Globalization.NumberStyles.HexNumber) * 100 + int.Parse(binary_data_1[10].ToString("X2"), System.Globalization.NumberStyles.HexNumber)) / Math.Pow(10, point);
 
 
                     Pressure_Output = Math.Round(Pressure_Output, 5);
@@ -438,8 +448,11 @@ namespace 压力监控系统_初版
                 {
                     try
                     {
-                        string input = serialPort.ReadLine();
-                        receiveTxt.Text += input + "\r\n";
+                        int inputSize = serialPort.BytesToRead;
+                        var input = new byte[inputSize];
+                        serialPort.Read(input, 0, inputSize);
+
+                        receiveTxt.Text += string.Join(" ", input) + Environment.NewLine;
 
                         if (saveDataFS != null)
                         {
@@ -592,7 +605,7 @@ namespace 压力监控系统_初版
                     this.AutoSendTimer.Interval = int.Parse(SendIntervalTimetbx.Text);
                     SendIntervalTimetbx.Enabled = false;
                     //sendTxt.ReadOnly = true;
-                    sendBto.Enabled = false;
+                    btnSend.Enabled = false;
                 }
                 catch
                 {
@@ -605,7 +618,7 @@ namespace 压力监控系统_初版
                 this.AutoSendTimer.Enabled = false;
                 SendIntervalTimetbx.Enabled = true;
                // sendTxt.ReadOnly = false;
-                sendBto.Enabled = true;
+                btnSend.Enabled = true;
             }
         }
         //private void AutoSendRadioBto_CheckedChanged(object sender, EventArgs e)
@@ -632,15 +645,15 @@ namespace 压力监控系统_初版
         //}
         private void AutoSendTimer_Tick(object sender, EventArgs e)
         {
-            sendBto.PerformClick();
+            btnSend.PerformClick();
         }
 
 
 
         private void sendBto_Click(object sender, EventArgs e)
         {
-            string Send_Text = sendTxt.Text;
-            if (OpenCloseBto.Text == "Close")
+            string Send_Text = txtSend.Text;
+            if (btnOpen.Text == "Close")
             {
                 if (Send_Text == null || Send_Text == "")
                 {
@@ -702,22 +715,78 @@ namespace 压力监控系统_初版
         //RS485发送
         public void Send_RS485()
         {
-            byte[] sendbuf = new byte[sendTxt.Text.Length / 2];
+            byte[] sendbuf = new byte[txtSend.Text.Length / 2];
 
             for(int i=0;i<sendbuf.Length; i++)
             {
                 try
                 {
-                    sendbuf[i] = byte.Parse(sendTxt.Text.Substring(i * 2, 2),System.Globalization.NumberStyles.HexNumber);
+                    sendbuf[i] = byte.Parse(txtSend.Text.Substring(i * 2, 2),System.Globalization.NumberStyles.HexNumber);
                 }
                 catch
                 {
                     throw new ArgumentException("数据缓存失败", "error");
                 }
             }
-                
+            //send 
+            serialPort.Write(sendbuf, 0, sendbuf.Length);
           
         }
+
+        //public bool SendModbusData(ref byte[] values)
+        //{
+        //    //Ensure port is open:
+        //    if (serialPort.IsOpen)
+        //    {
+
+        //        serialPort.DiscardOutBuffer();
+        //        serialPort.DiscardInBuffer();
+        //        //Function 3 response buffer:
+        //        byte[] response = new byte[values.Length + 2];
+        //        Array.Copy(values, response, values.Length);
+        //        //BuildMessage(address, (byte)3, start, registers, ref message);
+        //        //打包带有 CRC 验证的modbus 数据包:
+        //        byte[] CRC = new byte[2];
+        //        GetCRC(response, ref CRC);
+        //        //Console.WriteLine(CRC[0]);
+        //        //Console.WriteLine(CRC[1]);
+        //        response[0] = Convert.ToByte(response[0]);//地址
+        //        response[1] = Convert.ToByte(response[1]);//功能
+        //        //values[2] = (byte)(Convert.ToByte(values[2])>>8);//寄存器地址
+        //        response[2] = Convert.ToByte(response[2]);
+        //        response[3] = Convert.ToByte(response[3]);
+        //        //values[2] = (byte)(Convert.ToByte(values[]) >> 8);//寄存器个数
+        //        response[4] = Convert.ToByte(response[4]);
+        //        response[5] = Convert.ToByte(response[5]);
+
+        //        response[response.Length - 2] = CRC[0];
+        //        response[response.Length - 1] = CRC[1];
+        //        values = response; //返回带有 CRC 验证的modbus 数据包
+        //        /*
+        //        Console.WriteLine(values.Length); 
+        //        for (int i=0;i<values.Length;i++){
+        //             Console.WriteLine(values[i]);//控制台输出打包后的Modbus数据
+        //        }
+        //        */
+        //        //Send modbus message to Serial Port:
+        //        try
+        //        {
+        //            sp.Write(values, 0, values.Length);
+
+        //            return true;
+        //        }
+        //        catch (Exception)
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("串口未打开！");
+        //        return false;
+        //    }
+
+        //}
 
         //closing
         private void Mainform_FormClosing(object sender, FormClosingEventArgs e)
@@ -806,7 +875,31 @@ namespace 压力监控系统_初版
         }
 
 
-        #region **clear**
+        
+          public static byte[] CRC16(byte[] data)
+           {
+               int len = data.Length;
+               if (len > 0)
+              {
+                  ushort crc = 0xFFFF;
+ 
+                  for (int i = 0; i<len; i++)
+                  {
+                      crc = (ushort) (crc ^ (data[i]));
+                      for (int j = 0; j< 8; j++)
+                      {
+                          crc = (crc & 1) != 0 ? (ushort) ((crc >> 1) ^ 0xA001) : (ushort) (crc >> 1);
+                      }
+                  }
+                  byte hi = (byte)((crc & 0xFF00) >> 8);  //高位置
+                  byte lo = (byte)(crc & 0x00FF);         //低位置
+ 
+                  return new byte[] { hi, lo };
+              }
+              return new byte[] { 0, 0 };
+          }
+
+       #region **clear**
         //clear
         private void ClearBto_Value_Click(object sender, EventArgs e)
         {
@@ -821,7 +914,7 @@ namespace 压力监控系统_初版
 
         private void ClearSendTxt_Click(object sender, EventArgs e)
         {
-            sendTxt.Text = "";
+            txtSend.Text = "";
         }
 
         #endregion

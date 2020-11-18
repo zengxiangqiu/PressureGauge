@@ -24,7 +24,7 @@ namespace DigitalPG
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            var port = new SerialPort("COM5",2400);
+            var port = new SerialPort("COM4",2400);
             port.DataReceived += Port_DataReceived;
             try
             {
@@ -60,6 +60,10 @@ namespace DigitalPG
 
 
             logger.Debug(hex);
+
+            byte[] byte2Write = new byte[] { 0x01, 0x03, 0x0a, 0x5, 0x47, 0x00, 0x04, 0x00, 0x00, 0x1E, 0x27, 0x00, 0x04, 0xD1, 0x75 };
+
+            port.Write(byte2Write, 0, byte2Write.Length);
         }
     }
     

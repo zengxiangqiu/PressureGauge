@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.OpenCloseBto = new System.Windows.Forms.Button();
+            this.btnOpen = new System.Windows.Forms.Button();
             this.refreshBto = new System.Windows.Forms.Button();
             this.ParityLab = new System.Windows.Forms.Label();
             this.StopBitsLab = new System.Windows.Forms.Label();
@@ -62,10 +62,10 @@
             this.ClearSendTxt = new System.Windows.Forms.Button();
             this.ClearReceivedText = new System.Windows.Forms.Button();
             this.Save_Data = new System.Windows.Forms.Button();
-            this.sendBto = new System.Windows.Forms.Button();
+            this.btnSend = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.SendIntervalTimetbx = new System.Windows.Forms.TextBox();
-            this.sendTxt = new System.Windows.Forms.TextBox();
+            this.txtSend = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.sendStrRadiobto = new System.Windows.Forms.RadioButton();
@@ -83,7 +83,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.OpenCloseBto);
+            this.groupBox1.Controls.Add(this.btnOpen);
             this.groupBox1.Controls.Add(this.refreshBto);
             this.groupBox1.Controls.Add(this.ParityLab);
             this.groupBox1.Controls.Add(this.StopBitsLab);
@@ -111,15 +111,15 @@
             this.label3.TabIndex = 31;
             this.label3.Text = " ";
             // 
-            // OpenCloseBto
+            // btnOpen
             // 
-            this.OpenCloseBto.Location = new System.Drawing.Point(99, 182);
-            this.OpenCloseBto.Name = "OpenCloseBto";
-            this.OpenCloseBto.Size = new System.Drawing.Size(75, 23);
-            this.OpenCloseBto.TabIndex = 29;
-            this.OpenCloseBto.Text = "Open\r\n";
-            this.OpenCloseBto.UseVisualStyleBackColor = true;
-            this.OpenCloseBto.Click += new System.EventHandler(this.OpenCloseBto_Click);
+            this.btnOpen.Location = new System.Drawing.Point(99, 182);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.btnOpen.TabIndex = 29;
+            this.btnOpen.Text = "Open\r\n";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.OpenCloseBto_Click);
             // 
             // refreshBto
             // 
@@ -224,7 +224,7 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.Min_allowed);
             this.groupBox2.Controls.Add(this.Max_allowed);
-            this.groupBox2.Location = new System.Drawing.Point(577, 303);
+            this.groupBox2.Location = new System.Drawing.Point(717, 303);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(194, 150);
             this.groupBox2.TabIndex = 17;
@@ -317,7 +317,7 @@
             this.statuslabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 599);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(987, 22);
             this.statusStrip1.TabIndex = 20;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -335,10 +335,10 @@
             this.groupBox4.Controls.Add(this.ClearSendTxt);
             this.groupBox4.Controls.Add(this.ClearReceivedText);
             this.groupBox4.Controls.Add(this.Save_Data);
-            this.groupBox4.Controls.Add(this.sendBto);
+            this.groupBox4.Controls.Add(this.btnSend);
             this.groupBox4.Controls.Add(this.label6);
             this.groupBox4.Controls.Add(this.SendIntervalTimetbx);
-            this.groupBox4.Controls.Add(this.sendTxt);
+            this.groupBox4.Controls.Add(this.txtSend);
             this.groupBox4.Controls.Add(this.label2);
             this.groupBox4.Controls.Add(this.label1);
             this.groupBox4.Controls.Add(this.sendStrRadiobto);
@@ -346,7 +346,7 @@
             this.groupBox4.Controls.Add(this.recStrRadBto);
             this.groupBox4.Location = new System.Drawing.Point(222, 12);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(349, 362);
+            this.groupBox4.Size = new System.Drawing.Size(468, 362);
             this.groupBox4.TabIndex = 21;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "groupBox4";
@@ -412,15 +412,15 @@
             this.Save_Data.UseVisualStyleBackColor = true;
             this.Save_Data.Click += new System.EventHandler(this.Save_Data_Click);
             // 
-            // sendBto
+            // btnSend
             // 
-            this.sendBto.Location = new System.Drawing.Point(118, 284);
-            this.sendBto.Name = "sendBto";
-            this.sendBto.Size = new System.Drawing.Size(67, 19);
-            this.sendBto.TabIndex = 24;
-            this.sendBto.Text = "Send";
-            this.sendBto.UseVisualStyleBackColor = true;
-            this.sendBto.Click += new System.EventHandler(this.sendBto_Click);
+            this.btnSend.Location = new System.Drawing.Point(118, 284);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(67, 19);
+            this.btnSend.TabIndex = 24;
+            this.btnSend.Text = "Send";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.sendBto_Click);
             // 
             // label6
             // 
@@ -438,13 +438,13 @@
             this.SendIntervalTimetbx.Size = new System.Drawing.Size(43, 21);
             this.SendIntervalTimetbx.TabIndex = 22;
             // 
-            // sendTxt
+            // txtSend
             // 
-            this.sendTxt.Location = new System.Drawing.Point(21, 182);
-            this.sendTxt.Multiline = true;
-            this.sendTxt.Name = "sendTxt";
-            this.sendTxt.Size = new System.Drawing.Size(262, 87);
-            this.sendTxt.TabIndex = 15;
+            this.txtSend.Location = new System.Drawing.Point(21, 182);
+            this.txtSend.Multiline = true;
+            this.txtSend.Name = "txtSend";
+            this.txtSend.Size = new System.Drawing.Size(393, 87);
+            this.txtSend.TabIndex = 15;
             // 
             // label2
             // 
@@ -481,13 +481,13 @@
             this.receiveTxt.Multiline = true;
             this.receiveTxt.Name = "receiveTxt";
             this.receiveTxt.ReadOnly = true;
-            this.receiveTxt.Size = new System.Drawing.Size(262, 103);
+            this.receiveTxt.Size = new System.Drawing.Size(393, 103);
             this.receiveTxt.TabIndex = 14;
             // 
             // recStrRadBto
             // 
             this.recStrRadBto.AutoSize = true;
-            this.recStrRadBto.Location = new System.Drawing.Point(241, 20);
+            this.recStrRadBto.Location = new System.Drawing.Point(224, 22);
             this.recStrRadBto.Name = "recStrRadBto";
             this.recStrRadBto.Size = new System.Drawing.Size(59, 16);
             this.recStrRadBto.TabIndex = 16;
@@ -504,7 +504,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 621);
+            this.ClientSize = new System.Drawing.Size(987, 621);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox3);
@@ -533,7 +533,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button OpenCloseBto;
+        private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.Button refreshBto;
         private System.Windows.Forms.Label ParityLab;
         private System.Windows.Forms.Label StopBitsLab;
@@ -558,7 +558,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statuslabel;
         private System.Windows.Forms.GroupBox groupBox4;
-        private System.Windows.Forms.TextBox sendTxt;
+        private System.Windows.Forms.TextBox txtSend;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton sendStrRadiobto;
@@ -567,7 +567,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox SendIntervalTimetbx;
         private System.Windows.Forms.Button Save_Data;
-        private System.Windows.Forms.Button sendBto;
+        private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Button ClearSendTxt;
         private System.Windows.Forms.Button ClearReceivedText;
         private System.Windows.Forms.Timer waittime;
